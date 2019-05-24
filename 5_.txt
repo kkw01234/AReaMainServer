@@ -1,0 +1,89 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+
+public class Main {
+    public static ArrayList<BigInteger> arr = new ArrayList<>();
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        String str = br.readLine();
+        StringTokenizer st = new StringTokenizer(str);
+        BigInteger n = new BigInteger(st.nextToken());
+        BigInteger e = new BigInteger(st.nextToken());
+        BigInteger c = new BigInteger(st.nextToken());
+        BigInteger d;
+        BigInteger plain;
+        EulerTheorem(n);
+
+        BigInteger b =BigInteger.ONE;
+        bw.write("p 또는 q :");
+        for(int i=0;i<arr.size();i++) {
+            bw.write(arr.get(i).toString() + " ");
+            b=b.multiply(arr.get(i).subtract(BigInteger.ONE));
+        }
+        bw.write("Euler 파이 함수 = "+b.toString()+"\n");
+        d=function(b,e);
+        plain = plainTextfunc(c,d,n);
+
+        bw.write("Plain Text : "+plain+" d : "+d);
+        bw.flush();
+        bw.close();
+    }
+
+
+
+    public static BigInteger EulerTheorem(BigInteger eu){
+       BigInteger ret = BigInteger.ONE;
+       if(eu.mod(BigInteger.TWO).compareTo(BigInteger.ZERO)==0){
+           arr.add(BigInteger.TWO);
+       }
+       for(BigInteger i=BigInteger.valueOf(3);i.compareTo(eu.divide(BigInteger.TWO).add(BigInteger.ONE))<0;i=i.add(BigInteger.TWO)){
+           if(eu.mod(i).compareTo(BigInteger.ZERO)==0){
+                arr.add(i);
+           }
+           if(arr.size()==2){
+               break;
+           }
+       }
+       return ret;
+    }
+    public static BigInteger function(BigInteger euler,BigInteger e){
+        BigInteger i=BigInteger.ONE;
+
+        while(true){
+            euler=euler.add(BigInteger.ONE);
+            if(euler.mod(e).compareTo(BigInteger.ZERO)==0){
+                break;
+            }
+            i=i.add(BigInteger.ONE);
+            euler=euler.subtract(BigInteger.ONE);
+            euler=euler.multiply(i);
+        }
+        return i;
+    }
+
+    public static BigInteger plainTextfunc(BigInteger c,BigInteger d,BigInteger n){
+        BigInteger temp = c.pow(d.intValue());
+        System.out.println("숫자:"+temp);
+        System.out.println(Integer.toBinaryString(d.intValue()));
+        String binary = Integer.toBinaryString(d.intValue());
+        BigInteger temp2 = c;
+        BigInteger mod;
+        for(int i=1;i<binary.length();i++){
+            temp2 = temp2.pow(2);
+            if(binary.charAt(i)=='1'){
+                temp2 = temp2.multiply(c);
+            }
+           temp2 = temp2.mod(n);
+        }
+        System.out.println(temp.mod(n));
+        return temp2;
+
+    }
+}
