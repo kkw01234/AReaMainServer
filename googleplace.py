@@ -43,15 +43,23 @@ def insert_place(rest_google_id):
     print(type(rest_lat))
     rest_text = ''
     rest_time = ''
+    time = ''
     try:
-        rest_time = result.get('opening_hours').get('weekday_text')[0]
+        rest_time = result.get('opening_hours').get('weekday_text')
+        for rest in rest_time:
+            time += rest + '\n'
+        print(time)
     except:
         pass
-    rest_phone = result.get('formatted_phone_number')
+    rest_phone = ''
+    try:
+        rest_phone = result.get('formatted_phone_number')
+    except:
+        pass
     conn = pymysql.connect(host='118.220.3.71', user='root', password='rjsdnrkkw4809!!', db='area', charset='utf8')
     curs = conn.cursor()
     try:
-        sql = "INSERT INTO restaurant(restgoogleid,restName,restAddress,restLat,restLng,restText,restTime,restPhone) VALUES('"+rest_google_id+"','"+rest_name+"','"+rest_address+"',"+rest_lat+","+rest_lng+",'"+rest_text+"','"+rest_time+"','"+rest_phone+"')"
+        sql = "INSERT INTO restaurant(restgoogleid,restName,restAddress,restLat,restLng,restText,restTime,restPhone) VALUES('"+rest_google_id+"','"+rest_name+"','"+rest_address+"',"+rest_lat+","+rest_lng+",'"+rest_text+"','"+time+"','"+rest_phone+"')"
         print(sql)
 
         curs.execute(sql)
