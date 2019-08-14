@@ -538,7 +538,7 @@ def one_recommend_path():
     rows = curs.fetchall()
     if len(rows) > 0:
         row = rows[0]
-        sql = "SELECT * FROM recommendationrout WhERE pathid='" + row[0] + "'"
+        sql = "SELECT * FROM recommendationroute WhERE pathid='" + str(row[0]) + "'"
         curs.execute(sql)
         rows2 = curs.fetchall()
         path = {
@@ -551,6 +551,7 @@ def one_recommend_path():
                 'good': row[6],
                 'route': rows2
                 }
+        print(jsonify(path))
         return jsonify(path)
     else:
         return jsonify({'result': 'fail'})
